@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const Users = require("./users-model.js");
 const { restricted, only } = require("../auth/auth-middleware.js");
+const { json } = require("express");
 
 /**
   [GET] /api/users
@@ -47,5 +48,18 @@ router.get("/:user_id", restricted, only('admin'), (req, res, next) => { // done
     })
     .catch(next);
 });
+
+// ************** used to test my function ********************** //
+
+// router.post('/filtered', (req, res) => {
+//   const { username } = req.body;
+//   Users.findBy(username)
+//   .then(user => {
+//     res.json(user);
+//   })
+//   .catch(err => {
+//     res.json(err.message);
+//   })
+// });
 
 module.exports = router;
