@@ -34,6 +34,9 @@ const restricted = (req, res, next) => {
  }
 };
 
+
+//***************NOT WORKING YET - always falls into sad path**************//
+
 const only = role_name => (req, res, next) => {
   /*
     If the user does not provide a token in the Authorization header with a role_name
@@ -45,7 +48,28 @@ const only = role_name => (req, res, next) => {
 
     Pull the decoded token from the req object, to avoid verifying it again!
   */
-}
+ // fish the token from req
+  // fish the actual role from the token
+  // compare that against the role coming in through args
+  // if they're the same proceed otherwise bounce
+  const token = req.headers.authorization;
+  const actualRole = jwt.verify(token, JWT_SECRET, (err, decoded) => {
+    if (err) {
+      console.log(err.message);
+    } else {
+      console.log(decoded);
+    }
+  });
+
+  if (role_name !== actualRole) {
+    console.log(token);
+    res.status(403).json({ message: 'This is not for you' });
+  } else {
+    next();
+  }
+};
+
+
 
 
 const checkUsernameExists = (req, res, next) => {
